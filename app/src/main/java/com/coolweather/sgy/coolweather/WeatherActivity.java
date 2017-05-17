@@ -1,5 +1,6 @@
 package com.coolweather.sgy.coolweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.coolweather.sgy.coolweather.gson.Forecast;
 import com.coolweather.sgy.coolweather.gson.Weather;
+import com.coolweather.sgy.coolweather.service.AutoUpdateService;
 import com.coolweather.sgy.coolweather.util.HttpUtil;
 import com.coolweather.sgy.coolweather.util.Utility;
 
@@ -191,6 +193,8 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(WeatherActivity.this, AutoUpdateService.class);
+        startService(intent);
     }
 
     /**
@@ -224,6 +228,7 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (weather != null && "ok".equals(weather.status)) {
+
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(
                                     WeatherActivity.this).edit();
                             editor.putString("weather", responseText);
